@@ -31,6 +31,9 @@ export const PhaserGame = forwardRef(function PhaserGame ({ currentActiveScene }
         }
     }, [ref]);
 
+    EventBus.on('show-work-ex', ()=>{console.log("ahahhahah")})
+
+
     useEffect(() => {
 
         EventBus.on('current-scene-ready', (currentScene) => {
