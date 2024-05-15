@@ -5,18 +5,20 @@ export class MainGame extends Scene
 {
     player;
     showDebugW = false;
+    inbox = false;
     constructor ()
     {
         super('MainGame');
     }
-
+    
     create ()
     {
         this.initMap();
         this.initMCAnim();
 
         this.initPlayer();
-         
+        if(window.innerWidth < 800 || window.innerHeight < 550) {this.cameras.main.startFollow(this.player);}
+        
         this.showDebugWalls()
 
         this.physics.add.collider(this.player, this.wallsLayer);
@@ -25,15 +27,11 @@ export class MainGame extends Scene
         this.educationBox = this.physics.add.sprite(160, 410); this.educationBox.setScale(1.25);
         this.projectBox = this.physics.add.sprite(640, 244); this.projectBox.setScale(1.25);
         this.contactsBox = this.physics.add.sprite(350, 444); this.contactsBox.setScale(1.25);
+        this.aboutBox = this.physics.add.sprite(690, 440); this.aboutBox.setScale(5);
+
+        this.leftNullBox = this.physics.add.sprite(160, 327); this.leftNullBox.setScale(1.25, 2.65);
 
         this.cursors = this.input.keyboard.createCursorKeys()
-        // this.logo = this.add.image(512, 300, 'logo').setDepth(100);
-
-        // this.add.text(512, 460, 'Main Menu', {
-        //     fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-        //     stroke: '#000000', strokeThickness: 8,
-        //     align: 'center'
-        // }).setDepth(100).setOrigin(0.5);
         
         EventBus.emit('current-scene-ready', this);
     }
@@ -42,8 +40,8 @@ export class MainGame extends Scene
     {
         this.moveAndAnimate();
         this.checkOverlapsRooms();
+        
     }
-
 
     changeScene ()
     {
@@ -161,10 +159,16 @@ export class MainGame extends Scene
     }
 
     checkOverlapsRooms(){
-        this.physics.overlap(this.player, this.workexBox, ()=>{EventBus.emit('show-work-ex', this)});
-        this.physics.overlap(this.player, this.projectBox, EventBus.emit('show-projects', this));
-        this.physics.overlap(this.player, this.contactsBox, EventBus.emit('show-contacts', this));
-        this.physics.overlap(this.player, this.educationBox, EventBus.emit('show-education', this));
+        if(!this.inbox && (this.physics.overlap(this.player, this.workexBox, ()=>{EventBus.emit('show-work-ex', this)})
+        || this.physics.overlap(this.player, this.projectBox, ()=>{EventBus.emit('show-projects', this)})
+        || this.physics.overlap(this.player, this.contactsBox, ()=>{EventBus.emit('show-contacts', this)})
+        || this.physics.overlap(this.player, this.educationBox, ()=>{EventBus.emit('show-education', this)})
+        || this.physics.overlap(this.player, this.aboutBox, ()=>{EventBus.emit('show-about', this)}))){
+            this.inbox = true;
+        }
+        if(this.physics.overlap(this.player, this.leftNullBox)){
+            this.inbox = false;
+        }
     }
     
 

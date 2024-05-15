@@ -10,9 +10,9 @@ const config = {
     width: 832,
     height: 576,
     parent: 'game-container',
-    backgroundColor: '#028af8',
+    backgroundColor: '#fdba74',
     scale:{
-        scaleMode: Phaser.Scale.ScaleManager.RESIZE
+        scaleMode: Phaser.Scale.ScaleManager.AUTO
     },
     physics: {
         default: 'arcade',
