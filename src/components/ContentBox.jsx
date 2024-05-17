@@ -21,7 +21,7 @@ const ContentBox = ({show, setShow, open, setOpen}) => {
       <div onClick={()=> setOpen()} className="h-auto absolute right-8 top-5 cursor-pointer md:hidden">
         <img src={closeLogo} />
       </div>
-      <div className='h-64 font-mono text-orange-800'>
+      <div className='font-mono text-orange-900'>
         {contentMap.get(show)}
       </div>
     

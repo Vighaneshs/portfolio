@@ -27,9 +27,11 @@ export class MainGame extends Scene
         this.educationBox = this.physics.add.sprite(160, 410); this.educationBox.setScale(1.25);
         this.projectBox = this.physics.add.sprite(640, 244); this.projectBox.setScale(1.25);
         this.contactsBox = this.physics.add.sprite(350, 444); this.contactsBox.setScale(1.25);
-        this.aboutBox = this.physics.add.sprite(690, 440); this.aboutBox.setScale(5);
+        this.aboutBox = this.physics.add.sprite(690, 448); this.aboutBox.setScale(6, 5);
 
         this.leftNullBox = this.physics.add.sprite(160, 327); this.leftNullBox.setScale(1.25, 2.65);
+        this.rightNullbox = this.physics.add.sprite(690, 318); this.rightNullbox.setScale(6, 2);
+        this.middleNullBox = this.physics.add.sprite(350, 380); this.middleNullBox.setScale(1.25);
 
         this.cursors = this.input.keyboard.createCursorKeys()
         
@@ -166,7 +168,9 @@ export class MainGame extends Scene
         || this.physics.overlap(this.player, this.aboutBox, ()=>{EventBus.emit('show-about', this)}))){
             this.inbox = true;
         }
-        if(this.physics.overlap(this.player, this.leftNullBox)){
+        if(this.physics.overlap(this.player, this.leftNullBox)
+           || this.physics.overlap(this.player, this.rightNullbox)
+           || this.physics.overlap(this.player, this.middleNullBox)){
             this.inbox = false;
         }
     }

@@ -36,7 +36,7 @@ function App ()
                 <div className='h-screen content-center justify-self-center py-5 md:ml-48'>
                     <PhaserGame ref={phaserRef} currentActiveScene={currentScene}/>
                 </div>
-                <div className={`h-3/4 w-11/12 ml-6 md:ml-0 md:h-[576px] top-[84px] md:top-[78px] ${open ? 'z-[100]' : 'z-[-1]' } justify-self-center absolute left-0 p-4 md:relative shadow-md bg-yellow-100 md:z-auto items-center`}>
+                <div className={`h-3/4 w-11/12 ml-6 md:ml-0 md:h-[576px] top-[84px] md:top-[78px] ${open ? 'z-[40]' : 'z-[-1]' } justify-self-center absolute left-0 p-4 md:relative shadow-md bg-yellow-100 md:z-auto items-center  overflow-scroll`}>
                     <ContentBox show={show} setShow={handleShow} open={open} setOpen={handleSetOpen}/>
                 </div>
             </div>
