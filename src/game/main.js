@@ -2,6 +2,7 @@ import { Boot } from './scenes/Boot';
 import { MainGame } from './scenes/MainGame';
 import Phaser from 'phaser';
 import { Preloader } from './scenes/Preloader';
+import { PhaserNavMeshPlugin } from "phaser-navmesh";
 
 // Find out more information about the Game Config at:
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -21,11 +22,22 @@ const config = {
             debug: true
         }
     },
+    plugins: {
+        scene: [
+            {
+            key: "PhaserNavMeshPlugin", // Key to store the plugin class under in cache
+            plugin: PhaserNavMeshPlugin, // Class that constructs plugins
+            mapping: "navMeshPlugin", // Property mapping to use for the scene, e.g. this.navMeshPlugin
+            start: true
+            }
+        ]
+    },
     scene: [
         Boot,
         Preloader,
         MainGame
-    ]
+    ],
+    disableContextMenu: true
 };
 const StartGame = (parent) => {
 

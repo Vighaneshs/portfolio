@@ -9,13 +9,13 @@ const Work = () => {
           <p className='text-xl font-semibold border-2 border-orange-800'> Software Engineer, GE HealthCare</p>
           <ul className='indent-4 list-disc px-4 pt-4'>
             <li>
-              <p className='grid grid-cols-2'> <div className='text-lg font-semibold underline underline-offset-4'>PaaS</div> <div className='italic'>July 2023 - July 2024</div></p>
+              <p className='grid grid-cols-2'> <span className='text-lg font-semibold underline underline-offset-4'>PaaS</span> <span className='italic'>July 2023 - July 2024</span></p>
               <p className='text-l font-normal text-left'>I am designing, building and enhancing components for Edison HealthLink compute platform. I
     am engineering micro-services for logging, monitoring and connectivity in a high-availability cluster.
               </p>
             </li>
             <li>
-              <p className='grid grid-cols-2'> <div className='text-lg font-semibold underline underline-offset-4'>Cybersecurity (EEDP)</div> <div className='italic'>July 2021 - July 2023</div></p>
+              <p className='grid grid-cols-2'> <span className='text-lg font-semibold underline underline-offset-4'>Cybersecurity (EEDP)</span> <span className='italic'>July 2021 - July 2023</span></p>
               <p className='text-l font-normal text-left'> Developed micro-services in Go and Angular to enable Secure Service Access for service users.
                I have filed a Patent, worked on the micro-services for
               RBAC (Role Based Access Control) Software.
@@ -27,7 +27,7 @@ const Work = () => {
           <p className='text-xl font-semibold border-2 border-orange-800'> Software Intern, GE HealthCare</p>
           <ul className='indent-4 list-disc px-4 pt-4'>
             <li>
-              <p className='grid grid-cols-2'> <div className='text-lg font-semibold underline underline-offset-4'>Imaging Visualisation</div> <div className='italic'>June 2022 - August 2022</div></p>
+              <p className='grid grid-cols-2'> <span className='text-lg font-semibold underline underline-offset-4'>Imaging Visualisation</span> <span className='italic'>June 2022 - August 2022</span></p>
               <p className='text-l font-normal text-left'>Developed a Web Based CT Scan Viewer using VTK.js, Cornerstone.js and HTML.
               </p>
             </li>
