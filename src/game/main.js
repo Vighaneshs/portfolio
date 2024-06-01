@@ -19,15 +19,15 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            //debug: true
         }
     },
     plugins: {
         scene: [
             {
-            key: "PhaserNavMeshPlugin", // Key to store the plugin class under in cache
-            plugin: PhaserNavMeshPlugin, // Class that constructs plugins
-            mapping: "navMeshPlugin", // Property mapping to use for the scene, e.g. this.navMeshPlugin
+            key: "PhaserNavMeshPlugin",
+            plugin: PhaserNavMeshPlugin, 
+            mapping: "navMeshPlugin",
             start: true
             }
         ]

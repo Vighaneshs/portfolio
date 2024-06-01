@@ -12,7 +12,7 @@ const About = () => {
           </li>
             
           <p className='text-lg font-bold underline underline-offset-2'>Controls</p>
-          <li>Touch/Click on the floor to move character.</li>
+          <li>Touch/Click on the floor to move the character.</li>
           <li>You can also use Arrow Keys.</li>
           <p className='text-xl font-bold pt-5'>Feedback is appreciated!</p>
         </div>    

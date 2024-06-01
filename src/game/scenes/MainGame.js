@@ -115,6 +115,22 @@ export class MainGame extends Scene
         this.wallsLayer.setCollisionByProperty({ collided: true });
 
         this.navMesh = this.navMeshPlugin.buildMeshFromTilemap("mesh", this.map, [this.wallsLayer], undefined, 4);
+
+        const workexText = this.add.text(224, 228, 'WORK-EX', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
+        workexText.setStroke('#000000', 4);
+
+        const projectText = this.add.text(508, 228, 'PROJECTS', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
+        projectText.setStroke('#000000', 4);
+
+        const eduText = this.add.text(198, 352, 'EDUCATION', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
+        eduText.setStroke('#000000', 4);
+
+        const contactsText = this.add.text(400, 400, 'CONTACT ME', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
+        contactsText.setStroke('#000000', 4);
+
+        const aboutText = this.add.text(664, 440, 'ABOUT', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
+        aboutText.setStroke('#000000', 4);
+
         // const path = navMesh.findPath({ x: 10, y: 10 }, { x: 392, y: 323 });
         // this.navMesh.enableDebug();
         // this.navMesh.debugDrawClear(); // Clears the overlay
