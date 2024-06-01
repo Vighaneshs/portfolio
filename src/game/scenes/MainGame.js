@@ -40,14 +40,13 @@ export class MainGame extends Scene
 
         this.leftNullBox = this.physics.add.sprite(160, 327); this.leftNullBox.setScale(2, 2.65);
         this.rightNullbox = this.physics.add.sprite(690, 318); this.rightNullbox.setScale(6, 2);
-        this.middleNullBox = this.physics.add.sprite(350, 380); this.middleNullBox.setScale(2);
+        this.middleNullBox = this.physics.add.sprite(352, 370); this.middleNullBox.setScale(2);
 
 
         
 
         this.input.on('pointerdown', ()=>{
             const worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
-            console.log(worldPoint.x, worldPoint.y)
             this.currentPath = this.navMesh.findPath({x: this.player.body.x, y: this.player.body.y }, { x: worldPoint.x, y: worldPoint.y });
             if(this.currentPath == null){
                 this.target = this.rectangleCoordFinder(worldPoint.x, worldPoint.y);
@@ -84,9 +83,6 @@ export class MainGame extends Scene
             this.cameras.main.centerOn(416,288);
             this.isSmallScreen = false;
         }
-        //console.log(this.pathPoint && this.currPathIndex < this.pathPoints.length)
-        
-    
     }
 
     changeScene ()
@@ -116,7 +112,7 @@ export class MainGame extends Scene
 
         this.navMesh = this.navMeshPlugin.buildMeshFromTilemap("mesh", this.map, [this.wallsLayer], undefined, 4);
 
-        const workexText = this.add.text(224, 228, 'WORK-EX', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
+        const workexText = this.add.text(234, 228, 'WORK', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
         workexText.setStroke('#000000', 4);
 
         const projectText = this.add.text(508, 228, 'PROJECTS', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
@@ -125,7 +121,7 @@ export class MainGame extends Scene
         const eduText = this.add.text(198, 352, 'EDUCATION', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
         eduText.setStroke('#000000', 4);
 
-        const contactsText = this.add.text(400, 400, 'CONTACT ME', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
+        const contactsText = this.add.text(410, 400, 'CONTACT', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
         contactsText.setStroke('#000000', 4);
 
         const aboutText = this.add.text(664, 440, 'ABOUT', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });

@@ -14,7 +14,8 @@ const About = () => {
           <p className='text-lg font-bold underline underline-offset-2'>Controls</p>
           <li>Touch/Click on the floor to move the character.</li>
           <li>You can also use Arrow Keys.</li>
-          <p className='text-xl font-bold pt-5'>Feedback is appreciated!</p>
+          <p className='text-2xl font-bold pt-5'>Enter the rooms!</p>
+          <p className='text-l font-bold'>And Feedback is appreciated.</p>
         </div>    
     </div>
   )
