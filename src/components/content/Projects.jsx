@@ -29,15 +29,6 @@ const Projects = () => {
             </p>
           </li>
           <li>
-            <a className="after:content-['_↗']" href="https://github.com/Vighaneshs/VCS-BTP" target="_blank">
-              <span className='text-xl font-semibold'>Visual Cryptography,</span><span className='text-l pl-4'>Source Code</span>
-            </a>
-            <p>
-            Researched and Implemented different Visual Secret Sharing Schemes and compiled
-            all the results to synthesize Coloured Visual Secret Sharing Scheme for General Access Structures in Python. 
-            </p>
-          </li>
-          <li>
             <a className="after:content-['_↗']" href="https://github.com/Vighaneshs/penfightlatest" target="_blank">
               <span className='text-xl font-semibold'>A 3D Multiplayer Game</span><span className='text-l pl-4'>Source Code</span>
             </a>
