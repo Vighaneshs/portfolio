@@ -12,6 +12,7 @@ function App ()
     // The sprite can only be moved in the MainMenu Scene
     const [show, setShow] = useState("about")
     let [open, setOpen]= useState(true)
+    const [inCombat, setInCombat] = useState(false)
     const phaserRef = useRef();
 
     // Event emitted from the PhaserGame component
@@ -28,6 +29,7 @@ function App ()
     EventBus.on('show-contacts', ()=>{handleShow("contact")})
     EventBus.on('show-education', ()=>{handleShow("education")})
     EventBus.on('show-about', ()=>{handleShow("about")})
+    EventBus.on('start-combat', ()=>{ handleShow("AI"); setInCombat(true); })
     return (
         <>
         <Nav show={show} setShow={handleShow}/>
@@ -36,8 +38,8 @@ function App ()
                 <div className='h-screen content-center justify-self-center py-5 md:ml-48'>
                     <PhaserGame ref={phaserRef} currentActiveScene={currentScene}/>
                 </div>
-                <div className={`h-5/6 w-11/12 ml-6 md:ml-0 top-[84px] md:top-[78px] ${open ? 'z-[40]' : 'z-[-1]' } justify-self-center absolute left-0 p-4 md:relative shadow-md bg-yellow-100 md:z-auto items-center  overflow-scroll`}>
-                    <ContentBox show={show} setShow={handleShow} open={open} setOpen={handleSetOpen}/>
+                <div className={`h-5/6 w-11/12 ml-6 md:ml-0 top-[84px] md:top-[78px] ${open ? 'z-[40]' : 'z-[-1]' } justify-self-center absolute left-0 p-6 md:p-8 md:relative border-4 border-orange-950 outline outline-4 outline-orange-800 bg-yellow-100 md:z-auto items-center overflow-scroll`}>
+                    <ContentBox show={show} setShow={handleShow} open={open} setOpen={handleSetOpen} inCombat={inCombat} setInCombat={setInCombat}/>
                 </div>
             </div>
         </div>

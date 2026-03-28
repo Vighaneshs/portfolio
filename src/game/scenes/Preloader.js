@@ -35,6 +35,7 @@ export class Preloader extends Scene
         this.load.image('Ground', 'PortfolioMap.png');
         this.load.tilemapTiledJSON('portmap', 'PortfolioMap.json');
         this.load.spritesheet('mychar', 'myCharSprite.png', { frameWidth: 48, frameHeight: 96});
+        this.load.image('monster_npc', 'monster.png');
     }
 
     create ()

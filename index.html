@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <script>if(typeof process==='undefined'){window.process={env:{},platform:'browser',version:'',cwd:function(){return'/'}}}else if(!process.cwd){process.cwd=function(){return'/'}}</script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 </body>

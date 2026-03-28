@@ -12,6 +12,7 @@ export class MainGame extends Scene
     currPathIndex = 0;
     isMovingWithPointer = false;
     isSmallScreen = false;
+    combatTriggered = false;
 
     playerSpeed = 125;
     constructor ()
@@ -24,10 +25,11 @@ export class MainGame extends Scene
     {
         this.initMap();
         this.initMCAnim();
-
+        this.initNPC();
         this.initPlayer();
         
-        
+
+
         this.showDebugWalls()
 
         this.mainCollider = this.physics.add.collider(this.player, this.wallsLayer);
@@ -127,6 +129,34 @@ export class MainGame extends Scene
         const aboutText = this.add.text(664, 440, 'ABOUT', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
         aboutText.setStroke('#000000', 4);
 
+        const aiLabel = this.add.text(670, 418, 'AI', { fontFamily: 'Arial Black', fontSize: 10, color: '#ffffff', backgroundColor: '#9a3412', padding: { x: 4, y: 2 } });
+        aiLabel.setStroke('#000000', 2);
+        this.tweens.add({
+            targets: aiLabel,
+            y: aiLabel.y - 4,
+            duration: 800,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
+
+        const npcLabel = this.add.text(740, 468, 'NPC', { fontFamily: 'Arial Black', fontSize: 8, color: '#ffffff', backgroundColor: '#dc2626', padding: { x: 2, y: 1 } });
+        npcLabel.setStroke('#000000', 2);
+
+        const fightLabel = this.add.text(736, 456, 'FIGHT', { fontFamily: 'Arial Black', fontSize: 7, color: '#fef08a', backgroundColor: '#7c2d12', padding: { x: 2, y: 1 } });
+        fightLabel.setStroke('#000000', 1);
+        this.tweens.add({
+            targets: fightLabel,
+            y: fightLabel.y - 3,
+            duration: 600,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
+        EventBus.on('combat-ended', () => { this.combatTriggered = false; });
+
         // const path = navMesh.findPath({ x: 10, y: 10 }, { x: 392, y: 323 });
         // this.navMesh.enableDebug();
         // this.navMesh.debugDrawClear(); // Clears the overlay
@@ -146,6 +176,13 @@ export class MainGame extends Scene
         this.player.body.setSize(38, 28);
         //this.player.body.setOffset(4, 70);
         this.player.body.setOffset(23, 83);
+    }
+
+    initNPC()
+    {
+        this.npcBody = this.physics.add.image(780, 260, 'monster_npc');
+        this.npcBody.setScale(0.15);
+        this.npcBody.body.setImmovable(true);
     }
     initMCAnim()
     {   
@@ -179,6 +216,7 @@ export class MainGame extends Scene
             frameRate: 6,
             repeat: 0
         });
+
     }
 
 
@@ -300,6 +338,10 @@ export class MainGame extends Scene
     }
 
     checkOverlapsRooms(){
+        if (!this.combatTriggered && this.physics.overlap(this.player, this.npcBody)) {
+            this.combatTriggered = true;
+            EventBus.emit('start-combat');
+        }
         if(!this.inbox && (this.physics.overlap(this.player, this.workexBox, ()=>{EventBus.emit('show-work-ex', this)})
         || this.physics.overlap(this.player, this.projectBox, ()=>{EventBus.emit('show-projects', this)})
         || this.physics.overlap(this.player, this.contactsBox, ()=>{EventBus.emit('show-contacts', this)})
