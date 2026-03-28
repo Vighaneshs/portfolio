@@ -10,17 +10,19 @@ const MOOD_COLORS = {
     loyal: 'text-blue-600',
 };
 
-const CombatUI = ({ onCombatEnd }) => {
+const CombatUI = ({ onCombatEnd, aiReady, aiDownloading, aiProgress, onDownloadAI }) => {
     const [state, setState] = useState(null);
     const [npcThinking, setNpcThinking] = useState(false);
-    const logEndRef = useRef(null);
+    const logContainerRef = useRef(null);
 
     useEffect(() => {
         setState(initCombat());
     }, []);
 
     useEffect(() => {
-        logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (logContainerRef.current) {
+            logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+        }
     }, [state?.log]);
 
     useEffect(() => {
@@ -108,7 +110,6 @@ const CombatUI = ({ onCombatEnd }) => {
     const isOver = state.status !== 'active';
     const playerTurn = state.turn === 'player' && !isOver;
     const npcMood = state.npc?.mood || 'neutral';
-    const npcSoulWins = null; // Will be populated from soul in SDKShowcase
 
     return (
         <div className="border-2 border-red-800 rounded-md mb-4 overflow-hidden">
@@ -118,6 +119,31 @@ const CombatUI = ({ onCombatEnd }) => {
                     {npcThinking && <span className="ml-2 text-xs font-normal animate-pulse">NPC thinking...</span>}
                 </span>
             </div>
+
+            {!aiReady && (
+                <div className="bg-yellow-50 border-b border-orange-300 px-3 py-2 text-xs">
+                    <p className="text-orange-800 font-bold mb-1">⚠ You are fighting a basic rule-based AI.</p>
+                    {aiDownloading ? (
+                        <p className="text-orange-600 animate-pulse">{aiProgress || 'Downloading...'}</p>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <span className="text-orange-700">Download the LLM to fight an intelligent NPC.</span>
+                            <button
+                                onClick={onDownloadAI}
+                                className="shrink-0 bg-orange-800 text-yellow-100 px-2 py-0.5 rounded hover:bg-orange-700"
+                            >
+                                Download AI (~100MB)
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {aiReady && (
+                <div className="bg-green-50 border-b border-green-300 px-3 py-1.5 text-xs text-green-800 font-bold">
+                    ✓ Fighting LLM-powered AI
+                </div>
+            )}
 
             <div className="bg-orange-50 p-3 space-y-3">
                 {/* HP/Mana Bars */}
@@ -153,11 +179,10 @@ const CombatUI = ({ onCombatEnd }) => {
                 </div>
 
                 {/* Combat Log */}
-                <div className="max-h-24 overflow-y-auto bg-yellow-100 border border-orange-300 rounded p-2">
+                <div ref={logContainerRef} className="max-h-24 overflow-y-auto bg-yellow-100 border border-orange-300 rounded p-2">
                     {state.log.map((entry, i) => (
                         <p key={i} className={`text-xs ${entry.startsWith('[Bridge]') || entry.startsWith('[SDK') ? 'text-purple-700 font-bold' : 'text-orange-900'}`}>{entry}</p>
                     ))}
-                    <div ref={logEndRef} />
                 </div>
 
                 {/* Action Buttons or End State */}
