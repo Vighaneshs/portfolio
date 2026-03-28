@@ -49,23 +49,27 @@ export class MainGame extends Scene
 
         this.input.on('pointerdown', ()=>{
             const worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
-            this.currentPath = this.navMesh.findPath({x: this.player.body.x, y: this.player.body.y }, { x: worldPoint.x, y: worldPoint.y });
-            if(this.currentPath == null){
+            const start = { x: this.player.body.x, y: this.player.body.y };
+            let newPath = this.navMesh.findPath(start, { x: worldPoint.x, y: worldPoint.y });
+            if(newPath == null){
                 this.target = this.rectangleCoordFinder(worldPoint.x, worldPoint.y);
-                this.currentPath = this.navMesh.findPath({x: this.player.body.x, y: this.player.body.y }, { x: this.target.x, y: this.target.y });
-                if(this.currentPath == null){
-                    this.currentPath = this.navMesh.findPath({x: this.player.body.x-15, y: this.player.body.y }, { x: this.target.x, y: this.target.y });
-                    if(this.currentPath == null){
-                        this.currentPath = this.navMesh.findPath({x: this.player.body.x, y: this.player.body.y-15 }, { x: this.target.x, y: this.target.y });
-                        if(this.currentPath == null){
-                            this.currentPath = this.navMesh.findPath({x: this.player.body.x-15, y: this.player.body.y-15 }, { x: this.target.x, y: this.target.y });
+                newPath = this.navMesh.findPath(start, { x: this.target.x, y: this.target.y });
+                if(newPath == null){
+                    newPath = this.navMesh.findPath({x: start.x-15, y: start.y }, { x: this.target.x, y: this.target.y });
+                    if(newPath == null){
+                        newPath = this.navMesh.findPath({x: start.x, y: start.y-15 }, { x: this.target.x, y: this.target.y });
+                        if(newPath == null){
+                            newPath = this.navMesh.findPath({x: start.x-15, y: start.y-15 }, { x: this.target.x, y: this.target.y });
                         }
                     }
                 }
             }
-            this.player.body.setVelocity(0);
-            this.currPathIndex = 0;
-            if(this.mainCollider) this.mainCollider.active = false;
+            if(newPath != null){
+                this.currentPath = newPath;
+                this.player.body.setVelocity(0);
+                this.currPathIndex = 0;
+                if(this.mainCollider) this.mainCollider.active = false;
+            }
         }, this);
         this.cursors = this.input.keyboard.createCursorKeys()
         
