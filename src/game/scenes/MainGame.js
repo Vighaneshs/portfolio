@@ -308,26 +308,23 @@ export class MainGame extends Scene
                 this.isMovingWithPointer = false;
             } else if (!this.isMoving) {
                 this.isMovingWithPointer = true;
-                let dirX =  (this.currentPath[this.currPathIndex].x - this.player.body.x)/Math.abs((this.currentPath[this.currPathIndex].x - this.player.body.x));
-                let dirY =  (this.currentPath[this.currPathIndex].y - this.player.body.y)/Math.abs((this.currentPath[this.currPathIndex].y - this.player.body.y));
-                let magnitude = Math.sqrt((Math.pow( Math.abs(this.currentPath[this.currPathIndex].x - this.player.body.x), 2)) + (Math.pow( Math.abs(this.currentPath[this.currPathIndex].y - this.player.body.y), 2)))
-                let ratioX = ( Math.abs(this.currentPath[this.currPathIndex].x - this.player.body.x))/ magnitude;
-                let ratioY = ( Math.abs(this.currentPath[this.currPathIndex].y - this.player.body.y))/ magnitude;
-                if(ratioX >= ratioY){
-                    if (dirX > 0){
-                        this.player.anims.play({key:'walkRight', repeat:-1});
-                    }else{
-                        this.player.anims.play({key:'walkLeft',repeat:-1});
-                    }
-                }else{
-                    if (dirY > 0){
-                        this.player.anims.play({key:'walkDown',repeat:-1});
-                    }else{
-                        this.player.anims.play({key:'walkUp',repeat:-1});
-                    }
+                const dx = this.currentPath[this.currPathIndex].x - this.player.body.x;
+                const dy = this.currentPath[this.currPathIndex].y - this.player.body.y;
+                const magnitude = Math.sqrt(dx*dx + dy*dy);
+                if (magnitude < 1) {
+                    this.currPathIndex += 1;
+                    this.isMoving = false;
+                    return;
                 }
-                this.player.body.setVelocityX(ratioX*dirX*this.playerSpeed);
-                this.player.body.setVelocityY(ratioY*dirY*this.playerSpeed);
+                const ratioX = Math.abs(dx) / magnitude;
+                const ratioY = Math.abs(dy) / magnitude;
+                if (ratioX >= ratioY) {
+                    this.player.anims.play({key: dx > 0 ? 'walkRight' : 'walkLeft', repeat:-1});
+                } else {
+                    this.player.anims.play({key: dy > 0 ? 'walkDown' : 'walkUp', repeat:-1});
+                }
+                this.player.body.setVelocityX((dx / magnitude) * this.playerSpeed);
+                this.player.body.setVelocityY((dy / magnitude) * this.playerSpeed);
                 this.isMoving = true;
             }
         } else if (!this.isMovingWithKeyboard()) {
