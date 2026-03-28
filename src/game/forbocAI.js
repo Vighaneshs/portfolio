@@ -156,9 +156,9 @@ const MODEL_ID = 'SmolLM2-135M-Instruct-q0f16-MLC';
 
 const PERSONA = `You are a friendly AI guide to Vighanesh's portfolio website. This portfolio is built as a retro game where each room represents a section:
 - WORK room: work experience and career history
-- PROJECTS room: personal and professional projects
+- PROJECTS room: personal projects
 - EDUCATION room: academic background
-- CONTACT room: ways to reach Vighanes
+- CONTACT room: ways to reach Vighanesh
 - ABOUT room: general info about the portfolio
 
 Keep responses concise (2-3 sentences max). You can suggest the visitor explore specific rooms by mentioning them naturally. If recommending a room, end your response with [NAVIGATE:roomname] where roomname is one of: work, projects, education, contact, about.`;
@@ -183,7 +183,7 @@ const COMBAT_DEFEND_RULE = {
     name: 'Defend Validation',
     description: 'Can only defend if alive',
     actionTypes: ['DEFEND'],
-    validate: (action, context) => {
+    validate: (_action, context) => {
         const hp = context?.agentState?.hp ?? 1;
         return hp > 0 ? { valid: true } : { valid: false, reason: 'Cannot defend while defeated' };
     }
@@ -193,7 +193,7 @@ const COMBAT_HEAL_RULE = {
     name: 'Heal Validation',
     description: 'Requires 10 mana to heal',
     actionTypes: ['HEAL'],
-    validate: (action, context) => {
+    validate: (_action, context) => {
         const mana = context?.agentState?.mana ?? 0;
         return mana >= 10 ? { valid: true } : { valid: false, reason: 'Not enough mana (need 10)' };
     }
@@ -204,6 +204,16 @@ const COMBAT_FLEE_RULE = {
     description: 'Flee is always valid',
     actionTypes: ['FLEE'],
     validate: () => ({ valid: true })
+};
+const COMBAT_SUPER_RULE = {
+    id: 'combat-super',
+    name: 'Super Attack Validation',
+    description: 'Super attack valid when alive',
+    actionTypes: ['SUPER_ATTACK'],
+    validate: (_action, context) => {
+        const hp = context?.agentState?.hp ?? 1;
+        return hp > 0 ? { valid: true } : { valid: false, reason: 'Cannot attack while defeated' };
+    }
 };
 
 // In-browser memory store (replaces LanceDB-based SDK memory)
@@ -336,6 +346,7 @@ export async function initForbocAI(onProgress) {
         bridge.registerRule(COMBAT_DEFEND_RULE);
         bridge.registerRule(COMBAT_HEAL_RULE);
         bridge.registerRule(COMBAT_FLEE_RULE);
+        bridge.registerRule(COMBAT_SUPER_RULE);
 
         if (onProgress) onProgress('Initializing NPC Soul...');
         initSoul();
@@ -469,6 +480,7 @@ export async function npcCombatAction(combatState) {
         .map(m => m.text)
         .join('; ');
 
+    const superReady = (combatState.npcSuperCooldown ?? 0) === 0;
     const prompt = `You are an NPC fighter in a turn-based game. Choose ONE action.
 
 Your HP: ${combatState.npc.hp}/${combatState.npcMaxHP}
@@ -477,9 +489,14 @@ Enemy HP: ${combatState.player.hp}/${combatState.playerMaxHP}
 Round: ${combatState.round}
 ${combatMemories ? `Past actions: ${combatMemories}` : ''}
 
-Actions: ATTACK (deal 10-20 dmg), DEFEND (reduce next hit 50%), HEAL (restore 15 HP, costs 10 mana), FLEE (run away)
+Actions:
+- ATTACK: 10-20 dmg, 30% miss chance
+- SUPER_ATTACK: 20-30 dmg, 20% miss chance, 3-turn cooldown (${superReady ? 'READY' : 'ON COOLDOWN'})
+- DEFEND: reduce next hit by 50%
+- HEAL: restore 15 HP, costs 10 mana
+- FLEE: escape combat, 10% chance of failing
 
-Respond with ONLY one word: ATTACK, DEFEND, HEAL, or FLEE.`;
+Respond with ONLY one word: ATTACK, SUPER_ATTACK, DEFEND, HEAL, or FLEE.`;
 
     try {
         const reply = await engine.chat.completions.create({
@@ -489,7 +506,7 @@ Respond with ONLY one word: ATTACK, DEFEND, HEAL, or FLEE.`;
         });
 
         const raw = (reply.choices[0]?.message?.content || '').toUpperCase().trim();
-        const validActions = ['ATTACK', 'DEFEND', 'HEAL', 'FLEE'];
+        const validActions = ['SUPER_ATTACK', 'ATTACK', 'DEFEND', 'HEAL', 'FLEE'];
         const chosen = validActions.find(a => raw.includes(a));
 
         if (chosen) {

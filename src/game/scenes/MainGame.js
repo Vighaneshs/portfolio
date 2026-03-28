@@ -160,9 +160,13 @@ export class MainGame extends Scene
 
     initNPC()
     {
-        this.npcBody = this.physics.add.image(780, 260, 'monster_npc');
+        this.npcBody = this.physics.add.image(780, 270, 'monster_npc');
         this.npcBody.setScale(0.15);
         this.npcBody.body.setImmovable(true);
+
+        const fightText = this.add.text(780, 222, 'Fight Me!', { fontFamily: 'Arial Black', fontSize: 12, color: '#ffffff' });
+        fightText.setStroke('#000000', 4);
+        fightText.setOrigin(0.5, 1);
     }
     initMCAnim()
     {   

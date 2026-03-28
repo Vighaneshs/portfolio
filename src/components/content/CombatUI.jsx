@@ -174,13 +174,20 @@ const CombatUI = ({ onCombatEnd }) => {
                         </button>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-4 gap-1">
+                    <div className="grid grid-cols-2 gap-1">
                         <button
                             onClick={() => handlePlayerAction('ATTACK')}
                             disabled={!playerTurn}
                             className="text-xs font-bold bg-red-700 text-yellow-100 py-1.5 rounded disabled:opacity-40"
                         >
                             Attack
+                        </button>
+                        <button
+                            onClick={() => handlePlayerAction('SUPER_ATTACK')}
+                            disabled={!playerTurn || state.playerSuperCooldown > 0}
+                            className="text-xs font-bold bg-orange-500 text-yellow-100 py-1.5 rounded disabled:opacity-40"
+                        >
+                            {state.playerSuperCooldown > 0 ? `Super (${state.playerSuperCooldown})` : 'Super Attack'}
                         </button>
                         <button
                             onClick={() => handlePlayerAction('DEFEND')}
@@ -199,7 +206,7 @@ const CombatUI = ({ onCombatEnd }) => {
                         <button
                             onClick={() => handlePlayerAction('FLEE')}
                             disabled={!playerTurn}
-                            className="text-xs font-bold bg-gray-700 text-yellow-100 py-1.5 rounded disabled:opacity-40"
+                            className="col-span-2 text-xs font-bold bg-gray-700 text-yellow-100 py-1.5 rounded disabled:opacity-40"
                         >
                             Flee
                         </button>

@@ -44,6 +44,8 @@ function createCombatState() {
         npcMaxMana: 30,
         playerDefending: false,
         npcDefending: false,
+        playerSuperCooldown: 0,
+        npcSuperCooldown: 0,
         turn: 'player',
         round: 1,
         log: [],
@@ -86,6 +88,10 @@ export function resolveAction(actor, action) {
 
     switch (action) {
         case 'ATTACK': {
+            if (Math.random() < 0.30) {
+                addLog(`${actorName}'s attack missed!`);
+                break;
+            }
             let dmg = rollDamage(10, 20);
             if (state[defenderDefKey]) {
                 dmg = Math.floor(dmg * 0.5);
@@ -100,6 +106,32 @@ export function resolveAction(actor, action) {
                 logSDKFeature('RPG_MOODS', `${defenderKey} mood → hostile (low HP)`);
             }
             addLog(`${actorName} attacked for ${dmg} damage!`);
+            break;
+        }
+        case 'SUPER_ATTACK': {
+            const cooldownKey = isPlayer ? 'playerSuperCooldown' : 'npcSuperCooldown';
+            if (state[cooldownKey] > 0) {
+                addLog(`${actorName}'s Super Attack is on cooldown (${state[cooldownKey]} turns left)!`);
+                break;
+            }
+            state[cooldownKey] = 3;
+            if (Math.random() < 0.20) {
+                addLog(`${actorName}'s Super Attack missed!`);
+                break;
+            }
+            let superDmg = rollDamage(20, 30);
+            if (state[defenderDefKey]) {
+                superDmg = Math.floor(superDmg * 0.5);
+                state[defenderDefKey] = false;
+            }
+            const newSuperHP = Math.max(0, state[defenderKey].hp - superDmg);
+            state[defenderKey] = updateNPCStateLocally(state[defenderKey], { hp: newSuperHP });
+            logSDKFeature('updateNPCStateLocally', `${defenderKey}.hp → ${newSuperHP} (super)`);
+            if (newSuperHP < 20 && newSuperHP > 0) {
+                state[defenderKey] = updateNPCStateLocally(state[defenderKey], { mood: RPG_MOODS.hostile });
+                logSDKFeature('RPG_MOODS', `${defenderKey} mood → hostile (low HP)`);
+            }
+            addLog(`${actorName} used Super Attack for ${superDmg} damage!`);
             break;
         }
         case 'DEFEND': {
@@ -123,6 +155,10 @@ export function resolveAction(actor, action) {
             break;
         }
         case 'FLEE': {
+            if (Math.random() < 0.10) {
+                addLog(`${actorName} tried to flee but couldn't escape!`);
+                break;
+            }
             state.status = 'fled';
             addLog(`${actorName} fled from combat!`);
             return { ...state };
@@ -148,9 +184,11 @@ export function advanceTurn() {
     if (!state || state.status !== 'active') return;
     if (state.turn === 'player') {
         state.turn = 'npc';
+        if (state.npcSuperCooldown > 0) state.npcSuperCooldown -= 1;
     } else {
         state.turn = 'player';
         state.round += 1;
+        if (state.playerSuperCooldown > 0) state.playerSuperCooldown -= 1;
     }
 }
 
