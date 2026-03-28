@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import menuLogo from './icons/menuIcon.png';
 import closeLogo from './icons/closeIcon.png';
 
@@ -15,7 +16,10 @@ const Nav = ({show, setShow}) => {
 
   return (
     <div className='border-b-4 border-orange-950 w-full fixed top-0 left-0 z-50'>
-        <div className='md:flex items-center justify-between py-4 md:px-10 px-7  bg-yellow-100'>
+        <div className='relative overflow-hidden md:flex items-center justify-between py-4 md:px-10 px-7 bg-yellow-100'>
+            <motion.div className="absolute pointer-events-none rounded-full" style={{ left: '-5%', top: '-120%', width: 260, height: 260, background: 'radial-gradient(circle, rgba(234,88,12,0.2) 0%, transparent 70%)', filter: 'blur(40px)' }} animate={{ x: [0, 40, 10, 0], scale: [1, 1.1, 1] }} transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }} />
+            <motion.div className="absolute pointer-events-none rounded-full" style={{ left: '40%', top: '-150%', width: 220, height: 220, background: 'radial-gradient(circle, rgba(245,158,11,0.18) 0%, transparent 70%)', filter: 'blur(40px)' }} animate={{ x: [0, -30, 20, 0], scale: [1, 1.08, 1] }} transition={{ duration: 20, delay: 4, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }} />
+            <motion.div className="absolute pointer-events-none rounded-full" style={{ right: '-2%', top: '-100%', width: 200, height: 200, background: 'radial-gradient(circle, rgba(249,115,22,0.18) 0%, transparent 70%)', filter: 'blur(40px)' }} animate={{ x: [0, -25, 0], scale: [1, 1.12, 1] }} transition={{ duration: 22, delay: 8, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }} />
             <div className='font-mono font-bold text-2xl cursor-pointer text-orange-800 flex items-center text-justify '>
             Vighanesh Sharma
             </div>
