@@ -22,7 +22,7 @@ const ContentBox = ({show, setShow, open, setOpen, inCombat, setInCombat}) => {
   return (
     <>
     
-      <div onClick={()=> setOpen()} className="h-auto absolute right-8 top-5 cursor-pointer md:hidden">
+      <div onClick={()=> setOpen()} className="h-auto absolute right-8 top-5 cursor-pointer md:hidden z-20">
         <img src={closeLogo} />
       </div>
       <div className='relative min-h-[500px] overflow-hidden'>

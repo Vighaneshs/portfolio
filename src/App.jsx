@@ -88,12 +88,30 @@ function App ()
     function handleSetOpen(){
         setOpen(!open);
     }
-    EventBus.on('show-work-ex', ()=>{handleShow("work")})
-    EventBus.on('show-projects', ()=>{handleShow("projects")})
-    EventBus.on('show-contacts', ()=>{handleShow("contact")})
-    EventBus.on('show-education', ()=>{handleShow("education")})
-    EventBus.on('show-about', ()=>{handleShow("about")})
-    EventBus.on('start-combat', ()=>{ handleShow("AI"); setInCombat(true); })
+    useEffect(() => {
+        const onWork      = () => { setShow("work");      setOpen(true); };
+        const onProjects  = () => { setShow("projects");  setOpen(true); };
+        const onContact   = () => { setShow("contact");   setOpen(true); };
+        const onEducation = () => { setShow("education"); setOpen(true); };
+        const onAbout     = () => { setShow("about");     setOpen(true); };
+        const onCombat    = () => { setShow("AI");        setOpen(true); setInCombat(true); };
+
+        EventBus.on('show-work-ex',   onWork);
+        EventBus.on('show-projects',  onProjects);
+        EventBus.on('show-contacts',  onContact);
+        EventBus.on('show-education', onEducation);
+        EventBus.on('show-about',     onAbout);
+        EventBus.on('start-combat',   onCombat);
+
+        return () => {
+            EventBus.off('show-work-ex',   onWork);
+            EventBus.off('show-projects',  onProjects);
+            EventBus.off('show-contacts',  onContact);
+            EventBus.off('show-education', onEducation);
+            EventBus.off('show-about',     onAbout);
+            EventBus.off('start-combat',   onCombat);
+        };
+    }, []);
 
     return (
         <>
@@ -157,7 +175,7 @@ function App ()
                 <div className='h-screen content-center justify-self-center py-5 md:ml-48'>
                     <PhaserGame ref={phaserRef} currentActiveScene={currentScene}/>
                 </div>
-                <div className={`h-5/6 w-11/12 ml-6 md:ml-0 top-[84px] md:top-[78px] ${open ? 'z-[40]' : 'z-[-1]' } justify-self-center absolute left-0 p-6 md:p-8 md:relative border-4 border-orange-950 outline outline-4 outline-orange-800 bg-yellow-100 md:z-auto items-center overflow-scroll`}>
+                <div className={`h-5/6 w-11/12 ml-6 md:ml-0 top-[84px] md:top-[78px] ${open ? 'z-[40]' : 'z-[-1]'} justify-self-center absolute left-0 p-6 md:p-8 md:relative border-4 border-orange-950 outline outline-4 outline-orange-800 bg-yellow-100 md:z-auto items-center overflow-scroll`}>
                     <ContentBox show={show} setShow={handleShow} open={open} setOpen={handleSetOpen} inCombat={inCombat} setInCombat={setInCombat}/>
                 </div>
             </div>
