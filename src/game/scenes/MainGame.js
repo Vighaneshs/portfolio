@@ -71,7 +71,8 @@ export class MainGame extends Scene
                 if(this.mainCollider) this.mainCollider.active = false;
             }
         }, this);
-        this.cursors = this.input.keyboard.createCursorKeys()
+        this.cursors = this.input.keyboard.createCursorKeys();
+        this.wasd = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
         
         EventBus.emit('current-scene-ready', this);
     }
@@ -226,11 +227,12 @@ export class MainGame extends Scene
 
 
     moveAndAnimate(){
-        if (this.cursors.left.isUp
-            && this.cursors.right.isUp
-            && this.cursors.down.isUp
-            && this.cursors.up.isUp
-            && !this.isMovingWithPointer)
+        const left  = this.cursors.left.isDown  || this.wasd.left.isDown;
+        const right = this.cursors.right.isDown || this.wasd.right.isDown;
+        const up    = this.cursors.up.isDown    || this.wasd.up.isDown;
+        const down  = this.cursors.down.isDown  || this.wasd.down.isDown;
+
+        if (!left && !right && !up && !down && !this.isMovingWithPointer)
         {
             this.player.body.setVelocity(0);
             this.player.anims.play('idle', true);
@@ -242,14 +244,14 @@ export class MainGame extends Scene
             this.player.body.setOffset(23, 83);
         }
         // Horizontal movement
-        if (this.cursors.left.isDown)
+        if (left)
         {
             this.isMovingWithPointer = false;
-            if (this.cursors.up.isDown){
+            if (up){
                 this.player.body.setVelocityY(-1*this.playerSpeed*Math.sin((45*Math.PI)/180));
                 this.player.body.setVelocityX(-1*this.playerSpeed*Math.sin((45*Math.PI)/180));
             }
-            else if (this.cursors.down.isDown){
+            else if (down){
                 this.player.body.setVelocityY(this.playerSpeed*Math.sin((45*Math.PI)/180));
                 this.player.body.setVelocityX(-1*this.playerSpeed*Math.sin((45*Math.PI)/180));
             }
@@ -258,14 +260,14 @@ export class MainGame extends Scene
                 this.player.body.setVelocityX(-1*this.playerSpeed);
             }
         }
-        else if (this.cursors.right.isDown)
+        else if (right)
         {
             this.isMovingWithPointer = false;
-            if (this.cursors.up.isDown){
+            if (up){
                 this.player.body.setVelocityY(-1*this.playerSpeed*Math.sin((45*Math.PI)/180));
                 this.player.body.setVelocityX(this.playerSpeed*Math.sin((45*Math.PI)/180));
             }
-            else if (this.cursors.down.isDown){
+            else if (down){
                 this.player.body.setVelocityY(this.playerSpeed*Math.sin((45*Math.PI)/180));
                 this.player.body.setVelocityX(this.playerSpeed*Math.sin((45*Math.PI)/180));
             }
@@ -273,31 +275,31 @@ export class MainGame extends Scene
                 this.player.body.setVelocityY(0);
                 this.player.body.setVelocityX(this.playerSpeed);
             }
-        } else  if (this.cursors.up.isDown)
+        } else if (up)
         {
             this.isMovingWithPointer = false;
             this.player.body.setVelocityY(-1*this.playerSpeed);
         }
-        else if (this.cursors.down.isDown)
+        else if (down)
         {
             this.isMovingWithPointer = false;
             this.player.body.setVelocityY(this.playerSpeed);
         }
 
         // Update the animation last and give left/right animations precedence over up/down animations
-        if (this.cursors.left.isDown)
+        if (left)
         {
             this.player.anims.play('walkLeft', true);
         }
-        else if (this.cursors.right.isDown)
+        else if (right)
         {
             this.player.anims.play('walkRight', true);
         }
-        else if (this.cursors.up.isDown)
+        else if (up)
         {
             this.player.anims.play({key:'walkUp', end:10}, true);
         }
-        else if (this.cursors.down.isDown)
+        else if (down)
         {
             this.player.anims.play('walkDown', true);
         }
@@ -358,13 +360,10 @@ export class MainGame extends Scene
     }
 
     isMovingWithKeyboard(){
-        if (this.cursors.left.isDown
-            ||this.cursors.right.isDown
-            ||this.cursors.up.isDown
-            ||this.cursors.down.isDown)
-            {
-                return true
-            }
+        return this.cursors.left.isDown  || this.wasd.left.isDown
+            || this.cursors.right.isDown || this.wasd.right.isDown
+            || this.cursors.up.isDown    || this.wasd.up.isDown
+            || this.cursors.down.isDown  || this.wasd.down.isDown;
     }
     //For path correction
     rectangleCoordFinder(initPointerX, initPointerY ){
