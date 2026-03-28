@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 import Phaser from 'phaser';
@@ -29,7 +29,56 @@ function App ()
     const [show, setShow] = useState("about")
     let [open, setOpen]= useState(true)
     const [inCombat, setInCombat] = useState(false)
+    const [musicOn, setMusicOn] = useState(false)
     const phaserRef = useRef();
+    const audioRef = useRef(null);
+    const audioCtxRef = useRef(null);
+    const gainRef = useRef(null);
+
+    useEffect(() => {
+        const audio = new Audio('/assets/slowsong.mp3');
+        audio.loop = true;
+        audioRef.current = audio;
+
+        const ctx = new AudioContext();
+        audioCtxRef.current = ctx;
+        const source = ctx.createMediaElementSource(audio);
+
+        const gainNode = ctx.createGain();
+        gainNode.gain.value = 0;
+        gainRef.current = gainNode;
+
+        const highShelf = ctx.createBiquadFilter();
+        highShelf.type = 'highshelf';
+        highShelf.frequency.value = 3000;
+        highShelf.gain.value = -10;
+
+        source.connect(gainNode);
+        gainNode.connect(highShelf);
+        highShelf.connect(ctx.destination);
+
+        return () => {
+            audio.pause();
+            ctx.close();
+        };
+    }, []);
+
+    function toggleMusic() {
+        const audio = audioRef.current;
+        const ctx = audioCtxRef.current;
+        const gainNode = gainRef.current;
+        if (!audio || !ctx || !gainNode) return;
+        if (musicOn) {
+            audio.pause();
+            gainNode.gain.value = 0;
+        } else {
+            ctx.resume();
+            audio.play().catch(() => {});
+            gainNode.gain.setValueAtTime(0, ctx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.3);
+        }
+        setMusicOn(!musicOn);
+    }
 
     const currentScene = (scene) => {}
     function handleShow(whatShow){
@@ -48,7 +97,7 @@ function App ()
 
     return (
         <>
-        <Nav show={show} setShow={handleShow}/>
+        <Nav show={show} setShow={handleShow} musicOn={musicOn} toggleMusic={toggleMusic}/>
         <div id="app" className='relative bg-orange-300 h-screen w-full overflow-hidden'>
 
             {/* Aurora gradient background */}

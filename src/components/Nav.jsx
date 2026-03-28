@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import menuLogo from './icons/menuIcon.png';
 import closeLogo from './icons/closeIcon.png';
 
-const Nav = ({show, setShow}) => {
+const Nav = ({show, setShow, musicOn, toggleMusic}) => {
   let Links = [
     {name:"ABOUT", showKey:"about"},
     {name:"WORK-EX", showKey:"work"},
@@ -23,6 +23,13 @@ const Nav = ({show, setShow}) => {
             <div className='font-mono font-bold text-2xl cursor-pointer text-orange-800 flex items-center text-justify '>
             Vighanesh Sharma
             </div>
+            <button
+              onClick={toggleMusic}
+              title={musicOn ? 'Turn music off' : 'Turn music on'}
+              className="hidden md:flex items-center gap-1 font-mono text-sm text-orange-800 hover:text-orange-950 border-2 border-orange-800 hover:border-orange-950 px-2 py-1 cursor-pointer bg-transparent duration-200"
+            >
+              {musicOn ? '🔊' : '🔇'} <span>{musicOn ? 'MUSIC OFF' : 'MUSIC ON'}</span>
+            </button>
             <div onClick={()=> setOpen(!open)} className="h-auto absolute right-8 top-5 cursor-pointer md:hidden">
               <img src={open ? closeLogo:menuLogo} />
             </div>
@@ -33,10 +40,15 @@ const Nav = ({show, setShow}) => {
                 <a onClick={()=>{setShow(Link.showKey); setOpen(!open);}} className='cursor-pointer text-orange-800 hover:text-orange-950 duration-200 group relative flex items-center'>
                   <span className="opacity-0 group-hover:opacity-100 group-hover:animate-bounce-x absolute -left-5 text-orange-950">▶</span>
                   {Link.name}
-                </a>  
+                </a>
               </li>
             ))
           }
+          <li className='ml-8 font-mono text-xl text-orange-800 my-4 md:my-0 md:hidden'>
+            <button onClick={toggleMusic} className='cursor-pointer text-orange-800 hover:text-orange-950 duration-200 bg-transparent border-none flex items-center gap-1'>
+              {musicOn ? '🔊 MUSIC OFF' : '🔇 MUSIC ON'}
+            </button>
+          </li>
         </ul>
         </div>
     </div>
