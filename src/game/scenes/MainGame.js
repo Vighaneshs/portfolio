@@ -11,7 +11,7 @@ export class MainGame extends Scene
     isMoving = false;
     currPathIndex = 0;
     isMovingWithPointer = false;
-    isSmallScreen = false;
+    isSmallScreen = window.innerWidth < 800 || window.innerHeight < 550;
     combatTriggered = false;
 
     playerSpeed = 125;
@@ -20,15 +20,33 @@ export class MainGame extends Scene
         super('MainGame');
     }
 
-    
+
     create ()
     {
+        this._resizeObserver = new ResizeObserver(() => {
+            const small = window.innerWidth < 800 || window.innerHeight < 550;
+            if (small === this.isSmallScreen) return;
+            this.isSmallScreen = small;
+            if (small) {
+                this.cameras.main.startFollow(this.player);
+            } else {
+                this.cameras.main.stopFollow(this.player);
+                this.cameras.main.centerOn(416, 288);
+            }
+        });
+        this._resizeObserver.observe(document.documentElement);
+
         this.initMap();
         this.initMCAnim();
         this.initNPC();
         this.initPlayer();
-        
 
+        if (this.isSmallScreen) {
+            this.cameras.main.startFollow(this.player);
+        } else {
+            this.cameras.main.stopFollow(this.player);
+            this.cameras.main.centerOn(416, 288);
+        }
 
         this.showDebugWalls()
 
@@ -82,14 +100,6 @@ export class MainGame extends Scene
         this.moveAndAnimate();
         this.moveWithClick();
         this.checkOverlapsRooms();
-        if(window.innerWidth < 800 || window.innerHeight < 550) {
-            this.cameras.main.startFollow(this.player);
-            this.isSmallScreen = true;
-        } else {
-            this.cameras.main.stopFollow(this.player);
-            this.cameras.main.centerOn(416,288);
-            this.isSmallScreen = false;
-        }
     }
 
     changeScene ()
@@ -380,6 +390,10 @@ export class MainGame extends Scene
             return new pMath.Vector2(initPointerX, initPointerY);
         }
 
+    }
+
+    shutdown() {
+        this._resizeObserver?.disconnect();
     }
 
     showDebugWalls() {
