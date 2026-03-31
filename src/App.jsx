@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 
 import Phaser from 'phaser';
 import { PhaserGame } from './game/PhaserGame';
@@ -8,18 +7,17 @@ import Nav from './components/Nav';
 import ContentBox from './components/ContentBox';
 import { EventBus } from './game/EventBus';
 
-function AuroraBlob({ left, top, width, height, color, xKF, yKF, duration, delay = 0 }) {
+function AuroraBlob({ left, top, width, height, color, animationName, duration, delay = 0 }) {
     return (
-        <motion.div
+        <div
             className="absolute pointer-events-none rounded-full"
             style={{
                 left, top, width, height,
                 background: color,
                 filter: 'blur(90px)',
                 willChange: 'transform',
+                animation: `${animationName} ${duration}s ease-in-out ${delay}s infinite alternate`,
             }}
-            animate={{ x: xKF, y: yKF, scale: [1, 1.12, 0.94, 1.08, 1] }}
-            transition={{ duration, delay, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
         />
     );
 }
@@ -125,40 +123,34 @@ function App ()
                 <AuroraBlob
                     left="-10%" top="-20%" width={700} height={700}
                     color="radial-gradient(circle, rgba(234,88,12,0.75) 0%, transparent 70%)"
-                    xKF={[0, 60, 20, 0]} yKF={[0, 40, 80, 0]}
-                    duration={22} delay={0}
+                    animationName="blob-app-1" duration={22} delay={0}
                 />
                 <AuroraBlob
                     left="55%" top="40%" width={650} height={650}
                     color="radial-gradient(circle, rgba(220,38,38,0.6) 0%, transparent 70%)"
-                    xKF={[0, -50, -20, 0]} yKF={[0, -60, 20, 0]}
-                    duration={26} delay={3}
+                    animationName="blob-app-2" duration={26} delay={3}
                 />
                 <AuroraBlob
                     left="30%" top="50%" width={550} height={550}
                     color="radial-gradient(circle, rgba(245,158,11,0.55) 0%, transparent 70%)"
-                    xKF={[0, 40, -30, 0]} yKF={[0, 30, -50, 0]}
-                    duration={20} delay={6}
+                    animationName="blob-app-3" duration={20} delay={6}
                 />
 
                 {/* Mid-size accent blobs — slightly faster */}
                 <AuroraBlob
                     left="65%" top="-15%" width={420} height={420}
                     color="radial-gradient(circle, rgba(251,191,36,0.6) 0%, transparent 70%)"
-                    xKF={[0, -40, 10, 0]} yKF={[0, 60, 30, 0]}
-                    duration={18} delay={2}
+                    animationName="blob-app-4" duration={18} delay={2}
                 />
                 <AuroraBlob
                     left="-5%" top="55%" width={380} height={380}
                     color="radial-gradient(circle, rgba(194,65,12,0.65) 0%, transparent 70%)"
-                    xKF={[0, 50, 20, 0]} yKF={[0, -30, -60, 0]}
-                    duration={16} delay={8}
+                    animationName="blob-app-5" duration={16} delay={8}
                 />
                 <AuroraBlob
                     left="40%" top="-5%" width={320} height={320}
                     color="radial-gradient(circle, rgba(253,186,116,0.7) 0%, transparent 70%)"
-                    xKF={[0, -30, 40, 0]} yKF={[0, 50, 20, 0]}
-                    duration={14} delay={4}
+                    animationName="blob-app-6" duration={14} delay={4}
                 />
 
                 {/* Dot grid overlay — retro pixel texture */}

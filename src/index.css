@@ -1,3 +1,66 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Aurora blob CSS animations — replaces Framer Motion for compositor-thread performance */
+@keyframes blob-app-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(60px, 40px) scale(1.1); }
+  67% { transform: translate(20px, 80px) scale(0.96); }
+}
+@keyframes blob-app-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-50px, -60px) scale(1.1); }
+  67% { transform: translate(-20px, 20px) scale(0.96); }
+}
+@keyframes blob-app-3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(40px, 30px) scale(1.1); }
+  67% { transform: translate(-30px, -50px) scale(0.96); }
+}
+@keyframes blob-app-4 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-40px, 60px) scale(1.1); }
+  67% { transform: translate(10px, 30px) scale(0.96); }
+}
+@keyframes blob-app-5 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(50px, -30px) scale(1.1); }
+  67% { transform: translate(20px, -60px) scale(0.96); }
+}
+@keyframes blob-app-6 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-30px, 50px) scale(1.1); }
+  67% { transform: translate(40px, 20px) scale(0.96); }
+}
+
+@keyframes blob-nav-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(40px, 0px) scale(1.07); }
+  67% { transform: translate(10px, 0px) scale(1.05); }
+}
+@keyframes blob-nav-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-30px, 0px) scale(1.05); }
+  67% { transform: translate(20px, 0px) scale(1.05); }
+}
+@keyframes blob-nav-3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-25px, 0px) scale(1.12); }
+}
+
+@keyframes blob-cb-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, 20px) scale(1.08); }
+  67% { transform: translate(10px, -10px) scale(0.96); }
+}
+@keyframes blob-cb-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-25px, 30px) scale(1.1); }
+  67% { transform: translate(10px, -15px) scale(0.94); }
+}
+@keyframes blob-cb-3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(20px, -20px) scale(1.04); }
+  67% { transform: translate(-20px, 10px) scale(1.04); }
+}
